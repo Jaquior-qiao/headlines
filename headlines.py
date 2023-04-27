@@ -10,19 +10,20 @@ RSS_FEED_DICT = {
 }
 
 
+# @app.route("/")
+# @app.route("/ryf")
+# def ryf():
+#     return get_news("ryf")
+#
+#
+# @app.route("/fox")
+# def fox():
+#     return get_news("fox")
+
 @app.route("/")
-@app.route("/ryf")
-def ryf():
-    return get_news("ryf")
-
-
-@app.route("/fox")
-def fox():
-    return get_news("fox")
-
-
-def get_news(rss):
-    feed = feedparser.parse(RSS_FEED_DICT.get(rss))
+@app.route("/<published>")
+def get_news(published='ryf'):
+    feed = feedparser.parse(RSS_FEED_DICT.get(published))
     first_article = feed["entries"][0]
     return """<html>
         <body>

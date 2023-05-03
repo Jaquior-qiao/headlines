@@ -21,9 +21,12 @@ RSS_FEED_DICT = {
 # def fox():
 #     return get_news("fox")
 
-@app.route("/")
+@app.route("/", methods=["GET", "POST"])
 def get_news():
-    query = request.args.get("publication")
+    if request.method == "POST":
+        query = request.form.get("publication")
+    if request.method == "GET":
+        query = request.args.get("publication")
     if not query or query.lower() not in RSS_FEED_DICT:
         publication = "ryf"
     else:

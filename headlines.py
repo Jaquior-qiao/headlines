@@ -1,7 +1,7 @@
 from flask import Flask
 from flask import render_template
 import feedparser
-
+from flask import request
 app = Flask(__name__)
 
 RSS_FEED_DICT = {
@@ -22,9 +22,13 @@ RSS_FEED_DICT = {
 #     return get_news("fox")
 
 @app.route("/")
-@app.route("/<published>")
-def get_news(published='ryf'):
-    feed = feedparser.parse(RSS_FEED_DICT.get(published))
+def get_news():
+    query = request.args.get("publication")
+    if not query or query.lower() not in RSS_FEED_DICT:
+        publication = "ryf"
+    else:
+        publication = query.lower()
+    feed = feedparser.parse(RSS_FEED_DICT.get(publication))
     first_article = feed["entries"][0]
     return render_template("home.html", articles=feed["entries"])
 
